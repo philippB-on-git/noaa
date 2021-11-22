@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom_timeline.R
 \name{geom_timeline}
 \alias{geom_timeline}
-\title{<title>}
+\title{Earthquake timeline}
 \usage{
 geom_timeline(
   mapping = NULL,
@@ -16,28 +16,67 @@ geom_timeline(
 )
 }
 \arguments{
-\item{<x>}{(\emph{character}) <description>.}
-}
-\value{
-FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}} or
+\code{\link[ggplot2:aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
+default), it is combined with the default mapping at the top level of the
+plot. You must supply \code{mapping} if there is no plot mapping.}
+
+\item{data}{The data to be displayed in this layer. There are three
+options:
+
+If \code{NULL}, the default, the data is inherited from the plot
+data as specified in the call to \code{\link[ggplot2:ggplot]{ggplot()}}.
+
+A \code{data.frame}, or other object, will override the plot
+data. All objects will be fortified to produce a data frame. See
+\code{\link[ggplot2:fortify]{fortify()}} for which variables will be created.
+
+A \code{function} will be called with a single argument,
+the plot data. The return value must be a \code{data.frame}, and
+will be used as the layer data. A \code{function} can be created
+from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
+
+\item{stat}{The statistical transformation to use on the data for this
+layer, as a string.}
+
+\item{position}{Position adjustment, either as a string, or the result of
+a call to a position adjustment function.}
+
+\item{show.legend}{logical. Should this layer be included in the legends?
+\code{NA}, the default, includes if any aesthetics are mapped.
+\code{FALSE} never includes, and \code{TRUE} always includes.
+It can also be a named logical vector to finely select the aesthetics to
+display.}
+
+\item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
+rather than combining with them. This is most useful for helper functions
+that define both data and aesthetics and shouldn't inherit behaviour from
+the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
-<description> \cr
-\code{<function name>}.
+Adds an earthquake timeline geom to a ggplot2 object expecting noaa dataset cleaned with \code{\link{eq_clean_data}}.
 }
 \details{
-<details> \code{\link{<other function name>}}
+### Aesthetics
+geom_timeline uses the following aesthetics (bold is required):
+\itemize{
+  \item{\bold{x}}{DATE}
+  \item{y}{Grouping variable by which visualization is split (usually \emph{COUNTRY})}
+  \item{colour}{Colour of earthquake marker (e.g. \emph{TOTAL_DEATHS})}
+  \item{size}{Size of earthquake marker (e.g. \emph{MAG}, \emph{EQ_PRIMARY})}
+}
 }
 \examples{
 \dontrun{
-...
+system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") \%>\%
+  eq_read_data \%>\%
+  eq_clean_data \%>\%
+  filter(COUNTRY \%in\% c("USA", "CHINA") & YEAR > 2000) \%>\%
+  ggplot(aes(x = DATE, y = COUNTRY, color = TOTAL_DEATHS, size = MAG)) +
+  geom_timeline()
 }
 
 }
-\references{
-US National Highway Traffic Safety Administration \cr
-(\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
-}
 \seealso{
-\code{\link{<other function name>}}
+\code{\link{geom_timeline_label}}
 }

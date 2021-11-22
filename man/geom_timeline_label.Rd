@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom_timeline_label.R
 \name{geom_timeline_label}
 \alias{geom_timeline_label}
-\title{<title>}
+\title{Add text labels}
 \usage{
 geom_timeline_label(
   mapping = NULL,
@@ -17,28 +17,73 @@ geom_timeline_label(
 )
 }
 \arguments{
-\item{<x>}{(\emph{character}) <description>.}
-}
-\value{
-FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}} or
+\code{\link[ggplot2:aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
+default), it is combined with the default mapping at the top level of the
+plot. You must supply \code{mapping} if there is no plot mapping.}
+
+\item{data}{The data to be displayed in this layer. There are three
+options:
+
+If \code{NULL}, the default, the data is inherited from the plot
+data as specified in the call to \code{\link[ggplot2:ggplot]{ggplot()}}.
+
+A \code{data.frame}, or other object, will override the plot
+data. All objects will be fortified to produce a data frame. See
+\code{\link[ggplot2:fortify]{fortify()}} for which variables will be created.
+
+A \code{function} will be called with a single argument,
+the plot data. The return value must be a \code{data.frame}, and
+will be used as the layer data. A \code{function} can be created
+from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
+
+\item{stat}{The statistical transformation to use on the data for this
+layer, as a string.}
+
+\item{position}{Position adjustment, either as a string, or the result of
+a call to a position adjustment function.}
+
+\item{show.legend}{logical. Should this layer be included in the legends?
+\code{NA}, the default, includes if any aesthetics are mapped.
+\code{FALSE} never includes, and \code{TRUE} always includes.
+It can also be a named logical vector to finely select the aesthetics to
+display.}
+
+\item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
+rather than combining with them. This is most useful for helper functions
+that define both data and aesthetics and shouldn't inherit behaviour from
+the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
+
+\item{n_max}{(\emph{integer}) Number of labels to be drawn per group.}
 }
 \description{
-<description> \cr
-\code{<function name>}.
+Add text labels to timeline visualization via \code{geom_timeline} of earthquakes.
 }
 \details{
-<details> \code{\link{<other function name>}}
+Count of labels by group is controlled by \code{n_max} where top n_max earthquakes ordered by magnitude are used.
+For label text \emph{mapping} of \code{label} is expected. \cr\cr
+### Aesthetics
+geom_timeline_label requires the following aesthetics:
+\itemize{
+  \item{y}{Grouping variable by which visualization is split (usually \emph{COUNTRY})}
+  \item{label}{Label text (e.g. \emph{LOCATION_NAME})}
+}
 }
 \examples{
 \dontrun{
-...
+noaa_data <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") \%>\%
+  eq_read_data \%>\%
+  eq_clean_data \%>\%
+  filter(COUNTRY \%in\% c("USA", "CHINA") & YEAR > 2000)
+
+timeline <- noaa_data \%>\%
+  plot_eq_timeline(label = NULL)
+
+timeline +
+  geom_timeline_label(data = noaa_data, mapping = aes(y = COUNTRY, label = LOCATION_NAME), n_max = 6)
 }
 
 }
-\references{
-US National Highway Traffic Safety Administration \cr
-(\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
-}
 \seealso{
-\code{\link{<other function name>}}
+\code{\link{geom_timeline}}
 }

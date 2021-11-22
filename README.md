@@ -10,7 +10,10 @@
 status](https://travis-ci.com/philippB-on-git/noaa.svg?branch=master)](https://travis-ci.com/philippB-on-git/noaa)
 <!-- badges: end -->
 
-The goal of noaa is to …
+The goal of noaa is to visualize earthquake data obtained from U.S.
+National Oceanographic and Atmospheric Administration (NOAA): Earthquake
+Database. NOAA National Centers for Environmental Information.
+[doi:10.7289/V5TD9V7K](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.hazards:G012153)
 
 ## Installation
 
@@ -24,36 +27,34 @@ devtools::install_github("philippB-on-git/noaa")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+The package provides functionality to read, clean and visualize noaa
+data:
 
 ``` r
+library(dplyr)
 library(noaa)
-## basic example code
+
+noaa_data <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") %>%
+    eq_read_data %>%
+    eq_clean_data %>%
+    filter(COUNTRY %in% c("MEXICO", "JAPAN") & YEAR > 1800)
+
+timeline <- noaa_data %>%
+    plot_eq_timeline(label = NULL)
+
+timeline +
+    geom_timeline_label(data = noaa_data, mapping = ggplot2::aes(y = COUNTRY, label = LOCATION_NAME), n_max = 3)
+#> Warning: Removed 4 rows containing missing values (ggproto_timeline).
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+<img src="man/figures/README-example-1.png" width="100%" />
+
+Mapping of earthquake locations on maps:
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+noaa_data %>%
+    mutate(info_text = eq_create_label(.)) %>%
+    eq_map(annot_col = "info_text")
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/v1/examples>.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+![eq\_map example](example_eq_map.png)

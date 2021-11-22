@@ -2,33 +2,32 @@
 % Please edit documentation in R/eq_clean_data.R
 \name{eq_clean_data}
 \alias{eq_clean_data}
-\title{<title>}
+\title{Clean noaa data}
 \usage{
 eq_clean_data(data_raw, do_clean_location = T, do_clean_headers = T)
 }
 \arguments{
-\item{<x>}{(\emph{character}) <description>.}
+\item{data_raw}{(\emph{\link[dplyr]{tbl_df}}) raw noaa data imported with \code{\link{eq_read_data}}}
+
+\item{do_clean_location}{(\emph{logical}) if true, \code{\link{eq_location_clean}} is called}
+
+\item{do_clean_headers}{(\emph{logical}) if true, columns are renamed properly}
 }
 \value{
-FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
+clean noaa data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
 }
 \description{
-<description> \cr
-\code{<function name>}.
-}
-\details{
-<details> \code{\link{<other function name>}}
+Clean raw noaa data that was imported with \code{\link{eq_read_data}}. \emph{DATE}, \emph{LONGITUDE} and \emph{LATITUDE} are reformatted.
+By default \emph{LOCATION NAME} is cleaned via \code{\link{eq_location_clean}} and column names are reformatted to match naming convention (capitalize & replace space with "_").
 }
 \examples{
 \dontrun{
-...
+path <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa")
+eq_read_data(path) \%>\%
+  eq_clean_data(do_clean_headers = F)
 }
 
 }
-\references{
-US National Highway Traffic Safety Administration \cr
-(\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
-}
 \seealso{
-\code{\link{<other function name>}}
+\code{\link{eq_location_clean}}, \code{\link{eq_read_data}}
 }

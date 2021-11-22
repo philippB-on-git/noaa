@@ -1,23 +1,18 @@
-#' <title>
+#' @title Create label text for eq_map()
 #'
-#' <description> \cr
-#' \code{<function name>}.
+#' @description  Create a label text that can be used with \code{\link{eq_map}} by combining \emph{LOCATION}, \emph{MAGNITUDE} and \emph{TOTAL_DEATHS} into a html-string.
 #'
-#' @param <x> (\emph{character}) <description>.
+#' @param data (\emph{\link[dplyr]{tbl_df}}) noaa dataset cleaned with \code{\link{eq_clean_data}}
 #'
-#' @details
-#' <details> \code{\link{<other function name>}}
-#'
-#' @return FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
-#'
-#' @references US National Highway Traffic Safety Administration \cr
-#' (\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
-#'
-#' @seealso \code{\link{<other function name>}}
+#' @seealso \code{\link{eq_map}}
 #'
 #' @examples
 #' \dontrun{
-#' ...
+#' system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") %>%
+#'   eq_read_data %>%
+#'   eq_clean_data %>%
+#'   mutate(label_text = eq_create_label(.)) %>%
+#'   eq_map(annot_col = "label_text")
 #' }
 #'
 #' @importFrom stringr str_to_title

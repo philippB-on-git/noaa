@@ -1,23 +1,31 @@
-#' <title>
+#' @title Earthquake timeline
 #'
-#' <description> \cr
-#' \code{<function name>}.
+#' @description Adds an earthquake timeline geom to a ggplot2 object expecting noaa dataset cleaned with \code{\link{eq_clean_data}}.
 #'
-#' @param <x> (\emph{character}) <description>.
+#'
+#' @inheritParams ggplot2::layer
 #'
 #' @details
-#' <details> \code{\link{<other function name>}}
+#' ### Aesthetics
+#' geom_timeline uses the following aesthetics (bold is required):
+#' \itemize{
+#'   \item{\bold{x}}{DATE}
+#'   \item{y}{Grouping variable by which visualization is split (usually \emph{COUNTRY})}
+#'   \item{colour}{Colour of earthquake marker (e.g. \emph{TOTAL_DEATHS})}
+#'   \item{size}{Size of earthquake marker (e.g. \emph{MAG}, \emph{EQ_PRIMARY})}
+#' }
 #'
-#' @return FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
 #'
-#' @references US National Highway Traffic Safety Administration \cr
-#' (\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
-#'
-#' @seealso \code{\link{<other function name>}}
+#' @seealso \code{\link{geom_timeline_label}}
 #'
 #' @examples
 #' \dontrun{
-#' ...
+#' system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") %>%
+#'   eq_read_data %>%
+#'   eq_clean_data %>%
+#'   filter(COUNTRY %in% c("USA", "CHINA") & YEAR > 2000) %>%
+#'   ggplot(aes(x = DATE, y = COUNTRY, color = TOTAL_DEATHS, size = MAG)) +
+#'   geom_timeline()
 #' }
 #'
 #' @importFrom ggplot2 layer
@@ -46,20 +54,16 @@ geom_timeline <- function(mapping = NULL,
 #' helper function for ggproto_timeline
 #'
 #' @seealso \code{\link{ggproto_timeline}}
-#' @importFrom grid pointsGrob segmentsGrob gList
+#' @importFrom ggplot2 alpha
+#' @importFrom grid pointsGrob segmentsGrob gList gpar
 draw_group_timeline <- function(data, panel_params, coord) {
     coords <- coord$transform(data, panel_params)
-
-    # dbg_data[[length(dbg_data) + 1]] <<- data
-    # dbg_scales <<- panel_params
-    # dbg_coord <<- coord
-    # dbg_coords_[[length(dbg_coords_) + 1]] <<- coords
 
     pts <- grid::pointsGrob(coords$x,
                             coords$y,
                             pch = coords$shape,
                             size = grid::unit(coords$size / 5, "lines"),
-                            gp = grid::gpar(col = alpha(coords$colour, coords$alpha)))
+                            gp = gpar(col = alpha(coords$colour, coords$alpha)))
 
     ln  <- grid::segmentsGrob(x0 = 0,
                               x1 = 1,

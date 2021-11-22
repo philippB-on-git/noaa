@@ -1,23 +1,22 @@
-#' <title>
+#' @title Clean noaa data
 #'
-#' <description> \cr
-#' \code{<function name>}.
+#' @description Clean raw noaa data that was imported with \code{\link{eq_read_data}}. \emph{DATE}, \emph{LONGITUDE} and \emph{LATITUDE} are reformatted.
+#' By default \emph{LOCATION NAME} is cleaned via \code{\link{eq_location_clean}} and column names are reformatted to match naming convention (capitalize & replace space with "_").
 #'
-#' @param <x> (\emph{character}) <description>.
+#' @param data_raw (\emph{\link[dplyr]{tbl_df}}) raw noaa data imported with \code{\link{eq_read_data}}
+#' @param do_clean_location (\emph{logical}) if true, \code{\link{eq_location_clean}} is called
+#' @param do_clean_headers (\emph{logical}) if true, columns are renamed properly
 #'
-#' @details
-#' <details> \code{\link{<other function name>}}
 #'
-#' @return FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
+#' @return clean noaa data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
 #'
-#' @references US National Highway Traffic Safety Administration \cr
-#' (\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
-#'
-#' @seealso \code{\link{<other function name>}}
+#' @seealso \code{\link{eq_location_clean}}, \code{\link{eq_read_data}}
 #'
 #' @examples
 #' \dontrun{
-#' ...
+#' path <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa")
+#' eq_read_data(path) %>%
+#'   eq_clean_data(do_clean_headers = F)
 #' }
 #'
 #' @importFrom magrittr `%>%`
@@ -34,6 +33,7 @@ eq_clean_data <- function(data_raw, do_clean_location = T, do_clean_headers = T)
         { if (do_clean_location) eq_location_clean(.) else . } %>%
         { if (do_clean_headers) clean_headers(.) else . }
 }
+
 
 #' helper function for eq_clean_data
 #'

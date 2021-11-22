@@ -1,23 +1,23 @@
-#' <title>
+#' @title read noaa dataset
 #'
-#' <description> \cr
-#' \code{<function name>}.
+#' @description Read tab-delimited raw noaa dataset from U.S. National Oceanographic and Atmospheric Administration (NOAA): \cr
+#' National Geophysical Data Center / World Data Service (NGDC/WDS): NCEI/WDS Global Significant \cr
+#' Earthquake Database. NOAA National Centers for Environmental Information. doi:10.7289/V5TD9V7K
 #'
-#' @param <x> (\emph{character}) <description>.
+#' @param path (\emph{file path}) file location of raw data
 #'
-#' @details
-#' <details> \code{\link{<other function name>}}
 #'
-#' @return FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
+#' @return noaa data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
 #'
-#' @references US National Highway Traffic Safety Administration \cr
-#' (\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
+#' @references Earthquake Database. NOAA National Centers for Environmental Information. \cr
+#' (\href{https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.hazards:G012153}{doi:10.7289/V5TD9V7K})
 #'
-#' @seealso \code{\link{<other function name>}}
+#' @seealso \code{\link{eq_clean_data}}
 #'
 #' @examples
 #' \dontrun{
-#' ...
+#' path <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") %>%
+#' eq_read_data(path)
 #' }
 #'
 #' @importFrom readr read_delim cols col_skip col_double col_character

@@ -1,5 +1,6 @@
 ---
 output: github_document
+always_allow_html: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -20,7 +21,9 @@ knitr::opts_chunk$set(
 [![Travis build status](https://travis-ci.com/philippB-on-git/noaa.svg?branch=master)](https://travis-ci.com/philippB-on-git/noaa)
 <!-- badges: end -->
 
-The goal of noaa is to ...
+The goal of noaa is to visualize earthquake data obtained from U.S. National Oceanographic and Atmospheric Administration (NOAA): 
+Earthquake Database. NOAA National Centers for Environmental Information.  [doi:10.7289/V5TD9V7K](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.hazards:G012153)
+
 
 ## Installation
 
@@ -33,25 +36,29 @@ devtools::install_github("philippB-on-git/noaa")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+The package provides functionality to read, clean and visualize noaa data:
 
-```{r example}
+```{r example, fig.retina=3, fig.height=6, message=FALSE}
+library(dplyr)
 library(noaa)
-## basic example code
+
+noaa_data <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") %>%
+    eq_read_data %>%
+    eq_clean_data %>%
+    filter(COUNTRY %in% c("MEXICO", "JAPAN") & YEAR > 1800)
+
+timeline <- noaa_data %>%
+    plot_eq_timeline(label = NULL)
+
+timeline +
+    geom_timeline_label(data = noaa_data, mapping = ggplot2::aes(y = COUNTRY, label = LOCATION_NAME), n_max = 3)
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
+  
+  
+Mapping of earthquake locations on maps:
+```{r example2, results='hide', eval=FALSE}
+noaa_data %>%
+    mutate(info_text = eq_create_label(.)) %>%
+    eq_map(annot_col = "info_text")
 ```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+![eq_map example](example_eq_map.png)

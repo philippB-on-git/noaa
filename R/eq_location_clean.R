@@ -1,23 +1,20 @@
-#' <title>
+#' @title Clean location names
 #'
-#' <description> \cr
-#' \code{<function name>}.
+#' @description Reformats location names of noaa raw data and extracts country names into new collumn.
 #'
-#' @param <x> (\emph{character}) <description>.
+#' @param data (\emph{\link[dplyr]{tbl_df}}) raw noaa data imported with \code{\link{eq_read_data}}
+#' @param col (\emph{tidy eval syntax}) column containing location name
+#' @param country (\emph{tidy eval syntax}) column where country names are written to
 #'
-#' @details
-#' <details> \code{\link{<other function name>}}
+#' @return noaa dataframe with cleaned loaction and country names as tibble (see \code{\link[dplyr]{tbl_df}})
 #'
-#' @return FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
-#'
-#' @references US National Highway Traffic Safety Administration \cr
-#' (\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
-#'
-#' @seealso \code{\link{<other function name>}}
+#' @seealso \code{\link{eq_clean_data}}, \code{\link{eq_read_data}}
 #'
 #' @examples
 #' \dontrun{
-#' ...
+#' path <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa")
+#' eq_read_data(path) %>%
+#'   eq_location_clean
 #' }
 #'
 #' @importFrom rlang enquo quo_name

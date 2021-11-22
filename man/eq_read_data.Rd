@@ -2,33 +2,32 @@
 % Please edit documentation in R/eq_read_data.R
 \name{eq_read_data}
 \alias{eq_read_data}
-\title{<title>}
+\title{read noaa dataset}
 \usage{
 eq_read_data(path)
 }
 \arguments{
-\item{<x>}{(\emph{character}) <description>.}
+\item{path}{(\emph{file path}) file location of raw data}
 }
 \value{
-FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
+noaa data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
 }
 \description{
-<description> \cr
-\code{<function name>}.
-}
-\details{
-<details> \code{\link{<other function name>}}
+Read tab-delimited raw noaa dataset from U.S. National Oceanographic and Atmospheric Administration (NOAA): \cr
+National Geophysical Data Center / World Data Service (NGDC/WDS): NCEI/WDS Global Significant \cr
+Earthquake Database. NOAA National Centers for Environmental Information. doi:10.7289/V5TD9V7K
 }
 \examples{
 \dontrun{
-...
+path <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") \%>\%
+eq_read_data(path)
 }
 
 }
 \references{
-US National Highway Traffic Safety Administration \cr
-(\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
+Earthquake Database. NOAA National Centers for Environmental Information. \cr
+(\href{https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.hazards:G012153}{doi:10.7289/V5TD9V7K})
 }
 \seealso{
-\code{\link{<other function name>}}
+\code{\link{eq_clean_data}}
 }

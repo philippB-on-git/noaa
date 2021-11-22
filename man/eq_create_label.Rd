@@ -2,33 +2,26 @@
 % Please edit documentation in R/eq_create_label.R
 \name{eq_create_label}
 \alias{eq_create_label}
-\title{<title>}
+\title{Create label text for eq_map()}
 \usage{
 eq_create_label(data)
 }
 \arguments{
-\item{<x>}{(\emph{character}) <description>.}
-}
-\value{
-FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
+\item{data}{(\emph{\link[dplyr]{tbl_df}}) noaa dataset cleaned with \code{\link{eq_clean_data}}}
 }
 \description{
-<description> \cr
-\code{<function name>}.
-}
-\details{
-<details> \code{\link{<other function name>}}
+Create a label text that can be used with \code{\link{eq_map}} by combining \emph{LOCATION}, \emph{MAGNITUDE} and \emph{TOTAL_DEATHS} into a html-string.
 }
 \examples{
 \dontrun{
-...
+system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") \%>\%
+  eq_read_data \%>\%
+  eq_clean_data \%>\%
+  mutate(label_text = eq_create_label(.)) \%>\%
+  eq_map(annot_col = "label_text")
 }
 
 }
-\references{
-US National Highway Traffic Safety Administration \cr
-(\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
-}
 \seealso{
-\code{\link{<other function name>}}
+\code{\link{eq_map}}
 }

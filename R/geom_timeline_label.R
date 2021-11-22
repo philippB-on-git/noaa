@@ -1,23 +1,33 @@
-#' <title>
+#' @title Add text labels
 #'
-#' <description> \cr
-#' \code{<function name>}.
+#' @description  Add text labels to timeline visualization via \code{geom_timeline} of earthquakes.
 #'
-#' @param <x> (\emph{character}) <description>.
+#' @inheritParams ggplot2::layer
+#' @param n_max (\emph{integer}) Number of labels to be drawn per group.
 #'
-#' @details
-#' <details> \code{\link{<other function name>}}
+#' @details Count of labels by group is controlled by \code{n_max} where top n_max earthquakes ordered by magnitude are used.
+#' For label text \emph{mapping} of \code{label} is expected. \cr\cr
+#' ### Aesthetics
+#' geom_timeline_label requires the following aesthetics:
+#' \itemize{
+#'   \item{y}{Grouping variable by which visualization is split (usually \emph{COUNTRY})}
+#'   \item{label}{Label text (e.g. \emph{LOCATION_NAME})}
+#' }
 #'
-#' @return FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
-#'
-#' @references US National Highway Traffic Safety Administration \cr
-#' (\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
-#'
-#' @seealso \code{\link{<other function name>}}
+#' @seealso \code{\link{geom_timeline}}
 #'
 #' @examples
 #' \dontrun{
-#' ...
+#' noaa_data <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") %>%
+#'   eq_read_data %>%
+#'   eq_clean_data %>%
+#'   filter(COUNTRY %in% c("USA", "CHINA") & YEAR > 2000)
+#'
+#' timeline <- noaa_data %>%
+#'   plot_eq_timeline(label = NULL)
+#'
+#' timeline +
+#'   geom_timeline_label(data = noaa_data, mapping = aes(y = COUNTRY, label = LOCATION_NAME), n_max = 6)
 #' }
 #'
 #' @importFrom ggplot2 layer
@@ -57,7 +67,7 @@ geom_timeline_label <- function(mapping = NULL,
 #' helper function for ggproto_timeline_label
 #'
 #' @seealso \code{\link{ggproto_timeline_label}}
-#' @importFrom grid segmentsGrob textGrob gList
+#' @importFrom grid segmentsGrob textGrob gList gpar
 draw_group_timeline_label <- function(data, panel_params, coord) {
     coords <- coord$transform(data, panel_params)
 
@@ -68,9 +78,10 @@ draw_group_timeline_label <- function(data, panel_params, coord) {
     txt  <- grid::textGrob(label = coords$label,
                            x = coords$x + 0.005,
                            y = coords$y + 0.1 / length(panel_params$y$limits) + 0.005,
-                           rot = 45,
+                           rot = 30,
                            hjust = 0,
-                           vjust = 0)
+                           vjust = 0,
+                           gp = gpar(fontsize = 7))
 
     grid::gList(lns, txt)
 }

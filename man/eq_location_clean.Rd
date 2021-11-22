@@ -2,33 +2,31 @@
 % Please edit documentation in R/eq_location_clean.R
 \name{eq_location_clean}
 \alias{eq_location_clean}
-\title{<title>}
+\title{Clean location names}
 \usage{
 eq_location_clean(data, col = `Location Name`, country = COUNTRY)
 }
 \arguments{
-\item{<x>}{(\emph{character}) <description>.}
+\item{data}{(\emph{\link[dplyr]{tbl_df}}) raw noaa data imported with \code{\link{eq_read_data}}}
+
+\item{col}{(\emph{tidy eval syntax}) column containing location name}
+
+\item{country}{(\emph{tidy eval syntax}) column where country names are written to}
 }
 \value{
-FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
+noaa dataframe with cleaned loaction and country names as tibble (see \code{\link[dplyr]{tbl_df}})
 }
 \description{
-<description> \cr
-\code{<function name>}.
-}
-\details{
-<details> \code{\link{<other function name>}}
+Reformats location names of noaa raw data and extracts country names into new collumn.
 }
 \examples{
 \dontrun{
-...
+path <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa")
+eq_read_data(path) \%>\%
+  eq_location_clean
 }
 
 }
-\references{
-US National Highway Traffic Safety Administration \cr
-(\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
-}
 \seealso{
-\code{\link{<other function name>}}
+\code{\link{eq_clean_data}}, \code{\link{eq_read_data}}
 }

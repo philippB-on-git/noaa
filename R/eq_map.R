@@ -1,23 +1,19 @@
-#' <title>
+#' @title Visualize earthquake locations on map
 #'
-#' <description> \cr
-#' \code{<function name>}.
+#' @description  Draw earthquake locations from noaa dataset on leaflet map.
 #'
-#' @param <x> (\emph{character}) <description>.
+#' @param data (\emph{\link[dplyr]{tbl_df}}) noaa dataset cleaned with \code{\link{eq_clean_data}}
+#' @param annot_col (\emph{character}) column to be used as labels
 #'
-#' @details
-#' <details> \code{\link{<other function name>}}
 #'
-#' @return FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
-#'
-#' @references US National Highway Traffic Safety Administration \cr
-#' (\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
-#'
-#' @seealso \code{\link{<other function name>}}
+#' @seealso \code{\link{eq_create_label}}
 #'
 #' @examples
 #' \dontrun{
-#' ...
+#' system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") %>%
+#'   eq_read_data %>%
+#'   eq_clean_data %>%
+#'   eq_map(annot_col = "DATE")
 #' }
 #'
 #' @importFrom leaflet leaflet addTiles addCircleMarkers
