@@ -1,0 +1,25 @@
+test_plot_timeline <- function(data) {
+    data %>%
+        ggplot2::ggplot(aes(x = DATE, y = COUNTRY, color = TOTAL_DEATHS, size = MAG)) +
+        ggplot2::theme(legend.position = "bottom",
+                       panel.background = ggplot2::element_blank(),
+                       axis.line.x.bottom = element_line(colour = "black", size = 1)) +
+        ggplot2::ylab(NULL) +
+        geom_timeline() +
+        ggplot2::guides(size = guide_legend(title = "Richter scale value",
+                                            nrow = 1, title.vjust = 1,
+                                            order = 1,
+                                            title.theme = element_text(margin = margin(t = 3))),
+                        colour = guide_colorbar(title = "#deaths",
+                                                nrow = 1, title.vjust = 1,
+                                                title.theme = element_text(margin = margin(t = 3)),
+                                                label.theme = element_text(size = 8,
+                                                                           angle = 60,
+                                                                           hjust = 1))) +
+        geom_timeline_label(data = data, mapping = aes(y = COUNTRY, label = LOCATION_NAME))
+}
+
+# test
+path <- "C:/Users/Philipp/iCloudDrive/Dokumente/Statistics_DataScience/Courses/Coursera_Mastering_R__capstone/earthquakes-2021-06-05_16-41-49_+0200.tsv"
+dt <- eq_read_data(path) %>% eq_clean_data()
+g <- dt %>% filter(COUNTRY %in% c("CHINA", "USA") & DATE > "2000-01-01") %>% test_plot_timeline()

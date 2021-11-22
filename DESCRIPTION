@@ -1,0 +1,22 @@
+Package: noaa
+Type: Package
+Title: Visualization of earthquakes from NOAA data
+Version: 0.1.0
+Author: Philipp B.
+Maintainer: Philipp B. <dummy@email.com>
+Description: This package provides functions to clean and visualize earthquake data obtained from
+    U.S. National Oceanographic and Atmospheric Administration (NOAA).
+Imports:
+    dplyr, 
+    ggplot2,
+    grid,
+    leaflet,
+    lubridate,
+    magrittr,
+    readr,
+    rlang, 
+    stringr
+License: CC0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1

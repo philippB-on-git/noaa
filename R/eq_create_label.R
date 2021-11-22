@@ -1,16 +1,54 @@
+#' <title>
+#'
+#' <description> \cr
+#' \code{<function name>}.
+#'
+#' @param <x> (\emph{character}) <description>.
+#'
+#' @details
+#' <details> \code{\link{<other function name>}}
+#'
+#' @return FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
+#'
+#' @references US National Highway Traffic Safety Administration \cr
+#' (\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
+#'
+#' @seealso \code{\link{<other function name>}}
+#'
+#' @examples
+#' \dontrun{
+#' ...
+#' }
+#'
+#' @importFrom stringr str_to_title
+#' @export
+eq_create_label <- function(data) {
+    loc <- empty_if_na(str_to_title(data$LOCATION_NAME),
+                       FUN = make_label,
+                       label_name ="Location")
+    mag <- empty_if_na(data$MAG,
+                       FUN = make_label,
+                       label_name = "Magnitude")
+    dth <- empty_if_na(data$TOTAL_DEATHS,
+                       FUN = make_label,
+                       label_name = "Total deaths")
 
-# takes the dataset as an argument and creates an HTML label that can be used as the annotation text
-# in the leaflet map. This function should put together a character string for each earthquake that
-# will show the cleaned location (as cleaned by the eq_location_clean() function created in
-#                                 Module 1), the magnitude (EQ_PRIMARY), and the total number of
-# deaths (TOTAL_DEATHS), with boldface labels for each ("Location", "Total deaths", and "Magnitude").
-# If an earthquake is missing values for any of these, both the label and the value should be skipped
-# for that element of the tag. Your code should be able to be used in the following way:
-# readr::read_delim("earthquakes.tsv.gz", delim = "\t") %>%
-#     eq_clean_data() %>%
-#     dplyr::filter(COUNTRY == "MEXICO" & lubridate::year(DATE) >= 2000) %>%
-#     dplyr::mutate(popup_text = eq_create_label(.)) %>%
-#     eq_map(annot_col = "popup_text")
-eq_create_label <- function() {
+    paste0(loc, mag, dth)
+}
 
+
+#' helper function for eq_create_label
+#'
+#' @seealso \code{\link{eq_create_label}}
+#' @importFrom dplyr if_else
+empty_if_na <- function(x, FUN, ...) {
+    if_else(is.na(x), "", FUN(as.character(x), ...))
+}
+
+
+#' helper function for eq_create_label
+#'
+#' @seealso \code{\link{eq_create_label}}
+make_label <- function(x, label_name) {
+    paste0("<b>", label_name, ":</b> ", x, "<br />")
 }

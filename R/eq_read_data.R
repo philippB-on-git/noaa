@@ -1,12 +1,27 @@
-
-# Please cite as:
-# National Geophysical Data Center / World Data Service (NGDC/WDS): NCEI/WDS Global Significant
-# Earthquake Database. NOAA National Centers for Environmental Information. doi:10.7289/V5TD9V7K
-
-library(readr)
-library(dplyr)
-path <- "C:/Users/Philipp/iCloudDrive/Dokumente/Statistics_DataScience/Courses/Coursera_Mastering_R__capstone/earthquakes-2021-06-05_16-41-49_+0200.tsv"
-
+#' <title>
+#'
+#' <description> \cr
+#' \code{<function name>}.
+#'
+#' @param <x> (\emph{character}) <description>.
+#'
+#' @details
+#' <details> \code{\link{<other function name>}}
+#'
+#' @return FIBS data is returned as tibble (see \code{\link[dplyr]{tbl_df}})
+#'
+#' @references US National Highway Traffic Safety Administration \cr
+#' (\href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars})
+#'
+#' @seealso \code{\link{<other function name>}}
+#'
+#' @examples
+#' \dontrun{
+#' ...
+#' }
+#'
+#' @importFrom readr read_delim cols col_skip col_double col_character
+#' @export
 eq_read_data <- function(path) {
     read_delim(file = path,
                delim = "\t",
