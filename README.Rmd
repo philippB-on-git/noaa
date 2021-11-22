@@ -61,4 +61,4 @@ noaa_data %>%
     mutate(info_text = eq_create_label(.)) %>%
     eq_map(annot_col = "info_text")
 ```
-![eq_map example](example_eq_map.png)
+![eq_map example](man/figures/example_eq_map.png)
