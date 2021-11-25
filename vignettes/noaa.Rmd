@@ -14,6 +14,156 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+The goal of the **noaa** package is to provide tools to clean and visualize earthquake data obtained from U.S. National Oceanographic and Atmospheric Administration (NOAA). The package works best with **dplyr**, **ggplot2** and **leaflet**.
+
+```{r setup, message=FALSE}
 library(noaa)
+library(dplyr)
+```
+
+# Example data  
+
+The **noaa** package comes with an example dataset *"noaa_earthquakes.tsv"* obtained from U.S. National Oceanographic and Atmospheric Administration (NOAA)[^1].  
+The dataset can be accessed via
+
+```{r}
+path <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa")
+```
+
+[^1]: National 
+  Geophysical Data Center / World Data Service (NGDC/WDS): NCEI/WDS Global Significant
+  Earthquake Database. NOAA National Centers for Environmental Information. [doi:10.7289/V5TD9V7K](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.hazards:G012153)
+
+# Reading and cleaning data
+
+### Read data with `eq_read_data()`
+
+This function is used to read noaa data that follows the data structure fo U.S. National Oceanographic and Atmospheric Administration.
+The function expects one input argument:  
+  
+* `path`: file path
+
+The function returns a dataframe as *tibble*.
+
+```{r}
+noaa_data <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") %>%
+  eq_read_data()
+```
+
+### Clean data with `eq_clean_data()`
+
+`eq_clean_data()` creates a *date* column and converts *longitude* and *latitude* to numeric values.
+Optionally, `eq_clean_data()` can reformat the column names or call the subroutine `eq_location_clean()` to reformat the *location* column and extract the country name into a new column. Reformating the column names is handled by the internal function `clean_headers()` which is not exported to the **noaa** namespace. `clean_headers()` transforms all column names to uppercase, replaces spaces with "_" and creates the column *EQ_PRIMARY* containing the Richterscale magnitude, if not already present in the dataset.
+
+`eq_clean_data()` expects the following arguments:
+  
+* `data`: raw noaa data read with `eq_read_data()`
+* `do_clean_location` (*logical*): if true (default), `eq_location_clean()` is executed
+* `do_clean_headers` (*logical*): if true (default), column names are reformated
+
+```{r}
+noaa_clean <- noaa_data %>%
+  eq_clean_data(do_clean_location = TRUE, do_clean_headers = TRUE)
+```
+
+### Clean location column with `eq_location_clean()`
+
+Similar to `eq_clean_data()`, `eq_location_clean()` is used as preprocessing to clean the raw noaa data. The function exctracts the country name from the *loaction* column into the *country* column and replaces US states with "USA". `eq_location_clean()` is a quoting function, hence its inputs are quoted to be evaluated in the context of the data - similarly to **ggplot2** or **dplyr**. The function expects the following arguments:
+
+* `data`: raw noaa data read with `eq_read_data()`
+* `col`: column containing the location information (default: \`Location Name\`)
+* `country`: column name for country information (default: COUNTRY)
+
+```{r}
+noaa_clean <- noaa_data %>%
+  eq_location_clean(col = `Location Name`, country = COUNTRY)
+
+noaa_clean <- noaa_data %>%
+  eq_location_clean() %>%
+  eq_clean_data(do_clean_location = FALSE)
+```
+
+# Timeline plotting
+
+### Plot timeline with `plot_eq_timeline()`
+
+`plot_eq_timeline()` is a handy wrapper for `ggplot()`, `geom_timeline()` and `geom_timeline_label()` to plot a timeline of earthquakes grouped by *country* with indicating magnitude and total deaths. The top 5 earthquakes with largest magnitude for each group are labeled. The function expects the following arguments: 
+
+* `data`: noaa data cleaned with `eq_clean_data()` where both `do_clean_location = TRUE` and `do_clean_headers = TRUE`
+* `label`: column containing the desired label information (default: \`LOCATION_NAME\`). If `NULL` no labels are drawn.
+
+```{r, fig.width=7, fig.height=5}
+noaa_data %>%
+  eq_clean_data() %>%
+  filter(COUNTRY %in% c("USA", "MEXICO") & YEAR > 2000) %>%
+  plot_eq_timeline()
+
+noaa_clean %>%
+  filter(COUNTRY %in% c("USA", "MEXICO", "JAPAN") & YEAR > 1000) %>%
+  filter(!is.na(`DAMAGE_($MIL)`)) %>%
+  plot_eq_timeline(label = `DAMAGE_($MIL)`)
+```
+
+### `geom_timeline()`
+
+The timeline geom is used to create earthquake timelines with **ggplot2**. `geom_timeline()` intends to split timelines by some factor variable (e.g. *COUNTRY*) and plot incidents for each point in time per group. Usually, the color scale is mapped to *TOTAL_DEATHS* while shape size is mapped to *MAG* (or *EQ_PRIMARY*). The function's mapping parameter uses the following aesthetics:
+
+* `x`: required to be *DATE*
+* `y`: (optional) grouping variable used to split the timelines (e.g. *COUNTRY*)
+* `colour`: (optional) Colour of earthquake marker (e.g. *TOTAL_DEATHS*)
+* `size`: (optional) Size of earthquake marker (e.g. *MAG* or *EQ_PRIMARY*)
+
+```{r, fig.width=7, fig.height=5}
+library(ggplot2)
+
+noaa_clean %>%
+  filter(COUNTRY %in% c("USA", "CHINA") & YEAR > 2000) %>%
+  ggplot(aes(x = DATE, y = COUNTRY, color = TOTAL_DEATHS, size = MAG)) +
+  geom_timeline()
+```
+
+### `geom_timeline_label()`
+
+`geom_timeline_label()` is used to add labels to the timeline geom (`geom_timeline()`) where only `n_max` (default: 5) incidents regarding Richterscale magnitude are labeled. The function's mapping parameter uses the following aesthetics:
+
+* `y`: grouping variable by which timelines are split (usually *COUNTRY*)
+* `label`: label text (e.g. *LOCATION_NAME*)
+
+```{r, fig.width=7, fig.height=5}
+noaa_filtered <- noaa_clean %>%
+  filter(COUNTRY %in% c("USA", "CHINA") & YEAR > 2000)
+
+noaa_filtered %>%
+  plot_eq_timeline(label = NULL) +
+  geom_timeline_label(data = noaa_filtered, mapping = aes(y = COUNTRY, label = LOCATION_NAME), n_max = 6)
+```
+
+# Maps and geographic plotting
+
+### Draw a **leaflet** map with `eq_map()`
+
+`eq_map()` creates a leaflet map and draws earthquake incidents using the geographic information of the noaa dataset. The function expects the following arguments: 
+
+* `data`: noaa data cleaned with `eq_clean_data()` where both `do_clean_location = TRUE` and `do_clean_headers = TRUE`
+* `annot_col`: column to be used as label for popup information
+
+```{r, fig.width=7, fig.height=5}
+noaa_clean %>%
+  filter(COUNTRY %in% c("CANADA", "MEXICO") & YEAR > 2000) %>%
+  filter(!is.na(LATITUDE) & !is.na(LONGITUDE)) %>%
+  eq_map(annot_col = "DATE")
+```
+
+### Create popup info text with `eq_create_label()`
+
+`eq_create_label()` is used to combine the information *LOCATION*, *MAGNITUDE* (*EQ_PRIMARY*) and *TOTAL_DEATHS* into a HTML string that can be used as popup text of `eq_map()`. The function receives one input argument:
+
+* `data`: noaa data cleaned with `eq_clean_data()` where both `do_clean_location = TRUE` and `do_clean_headers = TRUE`
+
+```{r, fig.width=7, fig.height=5}
+noaa_clean %>%
+  filter(LONGITUDE > 65 & LONGITUDE < 90 & YEAR > 2000) %>%
+  filter(!is.na(LATITUDE) & !is.na(LONGITUDE)) %>%
+  mutate(label_text = eq_create_label(.)) %>%
+  eq_map(annot_col = "label_text")
 ```
