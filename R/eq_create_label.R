@@ -1,6 +1,6 @@
 #' @title Create label text for eq_map()
 #'
-#' @description  Create a label text that can be used with \code{\link{eq_map}} by combining \emph{LOCATION}, \emph{MAGNITUDE} and \emph{TOTAL_DEATHS} into a html-string.
+#' @description  Create a label text that can be used with \code{\link{eq_map}} by combining \emph{LOCATION}, \emph{MAG} and \emph{TOTAL_DEATHS} into a html-string.
 #'
 #' @param data (\emph{\link[dplyr]{tbl_df}}) noaa dataset cleaned with \code{\link{eq_clean_data}}
 #'
