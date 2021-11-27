@@ -5,3 +5,4 @@ tmp_for_vignette.txt
 ^\.travis\.yml$
 ^README\.Rmd$
 ^\.github$
+^LICENSE\.md$
