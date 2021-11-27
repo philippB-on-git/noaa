@@ -57,4 +57,4 @@ noaa_data %>%
     eq_map(annot_col = "info_text")
 ```
 
-![eq\_map example](man/figures/example_eq_map.png)
+![eq_map example](man/figures/example_eq_map.png)

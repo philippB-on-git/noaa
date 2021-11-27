@@ -28,7 +28,7 @@ Earthquake Database. NOAA National Centers for Environmental Information.  [doi:
 ## Installation
 
 You can install the development version of noaa from [GitHub](https://github.com/) with:
-
+  
 ``` r
 # install.packages("devtools")
 devtools::install_github("philippB-on-git/noaa")
