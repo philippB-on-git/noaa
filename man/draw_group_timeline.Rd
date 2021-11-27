@@ -12,3 +12,4 @@ helper function for ggproto_timeline
 \seealso{
 \code{\link{ggproto_timeline}}
 }
+\keyword{internal}

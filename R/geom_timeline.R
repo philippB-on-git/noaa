@@ -4,6 +4,8 @@
 #'
 #'
 #' @inheritParams ggplot2::layer
+#' @param na.rm If FALSE, the default, missing values are removed with a warning. If TRUE, missing values are silently removed.
+#' @param ... Other arguments passed to ggplot2::layer
 #'
 #' @details
 #' ### Aesthetics
@@ -53,6 +55,8 @@ geom_timeline <- function(mapping = NULL,
 
 #' helper function for ggproto_timeline
 #'
+#' @keywords internal
+#'
 #' @seealso \code{\link{ggproto_timeline}}
 #' @importFrom ggplot2 alpha
 #' @importFrom grid pointsGrob segmentsGrob gList gpar
@@ -75,6 +79,8 @@ draw_group_timeline <- function(data, panel_params, coord) {
 
 
 #' ggproto function for geom_timeline
+#'
+#' @keywords internal
 #'
 #' @seealso \code{\link{geom_timeline}}
 #' @importFrom ggplot2 ggproto Geom aes draw_key_point

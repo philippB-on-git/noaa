@@ -43,6 +43,8 @@ layer, as a string.}
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
 
+\item{na.rm}{If FALSE, the default, missing values are removed with a warning. If TRUE, missing values are silently removed.}
+
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
 \code{FALSE} never includes, and \code{TRUE} always includes.
@@ -55,6 +57,8 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 
 \item{n_max}{(\emph{integer}) Number of labels to be drawn per group.}
+
+\item{...}{Other arguments passed to ggplot2::layer}
 }
 \description{
 Add text labels to timeline visualization via \code{geom_timeline} of earthquakes.
@@ -80,7 +84,8 @@ timeline <- noaa_data \%>\%
   plot_eq_timeline(label = NULL)
 
 timeline +
-  geom_timeline_label(data = noaa_data, mapping = aes(y = COUNTRY, label = LOCATION_NAME), n_max = 6)
+  geom_timeline_label(data = noaa_data,
+                      mapping = aes(y = COUNTRY, label = LOCATION_NAME), n_max = 6)
 }
 
 }

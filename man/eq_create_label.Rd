@@ -10,7 +10,7 @@ eq_create_label(data)
 \item{data}{(\emph{\link[dplyr]{tbl_df}}) noaa dataset cleaned with \code{\link{eq_clean_data}}}
 }
 \description{
-Create a label text that can be used with \code{\link{eq_map}} by combining \emph{LOCATION}, \emph{MAGNITUDE} and \emph{TOTAL_DEATHS} into a html-string.
+Create a label text that can be used with \code{\link{eq_map}} by combining \emph{LOCATION}, \emph{MAG} and \emph{TOTAL_DEATHS} into a html-string.
 }
 \examples{
 \dontrun{

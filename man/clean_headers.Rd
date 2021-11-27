@@ -12,3 +12,4 @@ helper function for eq_clean_data
 \seealso{
 \code{\link{eq_clean_data}}
 }
+\keyword{internal}

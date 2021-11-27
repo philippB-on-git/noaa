@@ -17,7 +17,7 @@
 #'   eq_location_clean
 #' }
 #'
-#' @importFrom rlang enquo quo_name
+#' @importFrom rlang enquo quo_name `:=`
 #' @importFrom stringr str_extract
 #' @importFrom dplyr mutate relocate
 #' @export

@@ -16,4 +16,4 @@ ggproto function for geom_timeline
 \seealso{
 \code{\link{geom_timeline}}
 }
-\keyword{datasets}
+\keyword{internal}

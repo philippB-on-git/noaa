@@ -22,20 +22,23 @@
 #' @importFrom magrittr `%>%`
 #' @importFrom dplyr select mutate relocate
 #' @importFrom lubridate ymd
+#' @importFrom rlang .data
 #' @export
 eq_clean_data <- function(data_raw, do_clean_location = T, do_clean_headers = T) {
     data_raw %>%
         select(-grep("^Search Parameter", names(.), value = T)) %>%
-        mutate(date = ymd(paste(Year, Mo, Dy, sep = "-"), quiet = T)) %>%
-        relocate(date, .before = Year) %>%
-        mutate(Latitude = as.numeric(Latitude),
-               Longitude = as.numeric(Longitude)) %>%
+        mutate(date = ymd(paste(.$Year, .$Mo, .$Dy, sep = "-"), quiet = T)) %>%
+        relocate(.data$date, .before = .data$Year) %>%
+        mutate(Latitude = as.numeric(.$Latitude),
+               Longitude = as.numeric(.$Longitude)) %>%
         { if (do_clean_location) eq_location_clean(.) else . } %>%
         { if (do_clean_headers) clean_headers(.) else . }
 }
 
 
 #' helper function for eq_clean_data
+#'
+#' @keywords internal
 #'
 #' @seealso \code{\link{eq_clean_data}}
 #'
@@ -45,5 +48,5 @@ clean_headers <- function(data) {
     data %>%
         rename_all(toupper) %>%
         rename_all(str_replace_all, pattern = " ", replacement = "_") %>%
-        mutate(EQ_PRIMARY = MAG)
+        mutate(EQ_PRIMARY = .$MAG)
 }

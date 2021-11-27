@@ -12,3 +12,4 @@ helper function for eq_create_label
 \seealso{
 \code{\link{eq_create_label}}
 }
+\keyword{internal}

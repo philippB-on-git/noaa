@@ -42,6 +42,8 @@ layer, as a string.}
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
 
+\item{na.rm}{If FALSE, the default, missing values are removed with a warning. If TRUE, missing values are silently removed.}
+
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
 \code{FALSE} never includes, and \code{TRUE} always includes.
@@ -52,6 +54,8 @@ display.}
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
+
+\item{...}{Other arguments passed to ggplot2::layer}
 }
 \description{
 Adds an earthquake timeline geom to a ggplot2 object expecting noaa dataset cleaned with \code{\link{eq_clean_data}}.

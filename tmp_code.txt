@@ -1,7 +1,0 @@
-noaa_data %>%
-    mutate(info_text = eq_create_label(.)) %>%
-    eq_map(annot_col = "info_text") %>%
-    htmlwidgets::saveWidget("temp.html", selfcontained = F)
-#webshot::install_phantomjs()
-webshot::webshot("temp.html", file = "example_eq_map.png", cliprect = "viewport")
-file.remove("temp.html")

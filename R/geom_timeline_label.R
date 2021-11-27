@@ -4,6 +4,8 @@
 #'
 #' @inheritParams ggplot2::layer
 #' @param n_max (\emph{integer}) Number of labels to be drawn per group.
+#' @param na.rm If FALSE, the default, missing values are removed with a warning. If TRUE, missing values are silently removed.
+#' @param ... Other arguments passed to ggplot2::layer
 #'
 #' @details Count of labels by group is controlled by \code{n_max} where top n_max earthquakes ordered by magnitude are used.
 #' For label text \emph{mapping} of \code{label} is expected. \cr\cr
@@ -27,7 +29,8 @@
 #'   plot_eq_timeline(label = NULL)
 #'
 #' timeline +
-#'   geom_timeline_label(data = noaa_data, mapping = aes(y = COUNTRY, label = LOCATION_NAME), n_max = 6)
+#'   geom_timeline_label(data = noaa_data,
+#'                       mapping = aes(y = COUNTRY, label = LOCATION_NAME), n_max = 6)
 #' }
 #'
 #' @importFrom ggplot2 layer
@@ -47,8 +50,8 @@ geom_timeline_label <- function(mapping = NULL,
     #wrangle data here
 
     data <- data %>%
-        group_by(COUNTRY) %>%
-        slice_max(MAG, n = n_max, with_ties = F)
+        group_by(.$COUNTRY) %>%
+        slice_max(.$MAG, n = n_max, with_ties = F)
 
 
     ggplot2::layer(
@@ -65,6 +68,8 @@ geom_timeline_label <- function(mapping = NULL,
 
 
 #' helper function for ggproto_timeline_label
+#'
+#' @keywords internal
 #'
 #' @seealso \code{\link{ggproto_timeline_label}}
 #' @importFrom grid segmentsGrob textGrob gList gpar
@@ -88,6 +93,8 @@ draw_group_timeline_label <- function(data, panel_params, coord) {
 
 
 #' ggproto function for geom_timeline_label
+#'
+#' @keywords internal
 #'
 #' @seealso \code{\link{geom_timeline_label}}
 #' @importFrom ggplot2 ggproto Geom aes draw_key_label

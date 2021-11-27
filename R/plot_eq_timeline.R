@@ -19,16 +19,18 @@
 #'   plot_eq_timeline(label = DATE)
 #' }
 #'
-#' @importFrom ggplot2 ggplot aes theme element_blank element_line guides guide_legend guide_colorbar element_text margin
+#' @importFrom ggplot2 ggplot aes theme element_blank element_line guides guide_legend
+#' guide_colorbar element_text margin
 #' @importFrom magrittr `%>%`
 #' @importFrom dplyr mutate
-#' @importFrom rlang enquo quo_is_null `!!`
+#' @importFrom rlang .data enquo quo_is_null `!!`
 #' @export
 plot_eq_timeline <- function(data, label = LOCATION_NAME) {
     label <- enquo(label)
 
     data %>%
-        ggplot(aes(x = DATE, y = COUNTRY, color = TOTAL_DEATHS, size = MAG)) +
+        ggplot(aes(x = .data$DATE, y = .data$COUNTRY,
+                   color = .data$TOTAL_DEATHS, size = .data$MAG)) +
         theme(legend.position = "bottom",
               panel.background = element_blank(),
               axis.line.x.bottom = element_line(colour = "black", size = 1)) +

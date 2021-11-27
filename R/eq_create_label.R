@@ -34,6 +34,8 @@ eq_create_label <- function(data) {
 
 #' helper function for eq_create_label
 #'
+#' @keywords internal
+#'
 #' @seealso \code{\link{eq_create_label}}
 #' @importFrom dplyr if_else
 empty_if_na <- function(x, FUN, ...) {
@@ -42,6 +44,8 @@ empty_if_na <- function(x, FUN, ...) {
 
 
 #' helper function for eq_create_label
+#'
+#' @keywords internal
 #'
 #' @seealso \code{\link{eq_create_label}}
 make_label <- function(x, label_name) {
