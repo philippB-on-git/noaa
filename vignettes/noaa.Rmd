@@ -24,10 +24,22 @@ library(dplyr)
 # Example data  
 
 The **noaa** package comes with an example dataset *"noaa_earthquakes.tsv"* obtained from U.S. National Oceanographic and Atmospheric Administration (NOAA)[^1].  
-The dataset can be accessed via
+The dataset path can be accessed via
 
 ```{r}
 path <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa")
+```
+
+### Load example noaa data with `eq_noaa_example()`
+
+`eq_noaa_example()` returns the raw noaa example dataset[^1] that comes with the noaa package:
+
+```{r}
+# equivalent to eq_noaa_example:
+# noaa_data <- system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") %>%
+#   eq_read_data()
+
+noaa_data <- eq_noaa_example()
 ```
 
 [^1]: National 

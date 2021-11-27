@@ -36,3 +36,31 @@ eq_read_data <- function(path) {
                    `Total Damage ($Mil)` = col_double()
                ))
 }
+
+
+#' @title load example noaa data
+#'
+#' @description Load raw noaa example dataset from U.S. National Oceanographic and Atmospheric Administration (NOAA): \cr
+#' National Geophysical Data Center / World Data Service (NGDC/WDS): NCEI/WDS Global Significant \cr
+#' Earthquake Database. NOAA National Centers for Environmental Information. doi:10.7289/V5TD9V7K
+#'
+#'
+#' @return example noaa data, that comes with noaa package, is returned as tibble (see \code{\link[dplyr]{tbl_df}})
+#'
+#' @references Earthquake Database. NOAA National Centers for Environmental Information. \cr
+#' (\href{https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.hazards:G012153}{doi:10.7289/V5TD9V7K})
+#'
+#' @seealso \code{\link{eq_read_data}}
+#'
+#' @examples
+#' \dontrun{
+#' noaa_raw <- eq_noaa_example()
+#' }
+#'
+#' @importFrom magrittr `%>%`
+#' @export
+eq_noaa_example <- function() {
+    system.file("extdata", "noaa_earthquakes.tsv", package = "noaa") %>%
+        eq_read_data
+}
+
